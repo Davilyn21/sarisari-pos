@@ -4,11 +4,7 @@
   ],
   "functions": {
     "api/index.js": {
-      "includeFiles": [
-        "src/views/**",
-        "src/db/schema.sql",
-        "public/**"
-      ],
+      "includeFiles": "{src/views/**,src/db/schema.sql,public/**}",
       "maxDuration": 30
     }
   }
