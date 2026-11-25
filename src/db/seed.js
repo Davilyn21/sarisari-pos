@@ -47,7 +47,7 @@ async function main() {
   await upsertProduct({ name: 'Cooking Oil 1L', barcode: '4800016646789', category_id: household, unit: 'bottle', cost_price: 60, selling_price: 80, stock_quantity: 15, reorder_level: 5 });
 
   console.log('Seed complete.');
-  await pool.end();
+  if (pool) await pool.end();
 }
 
 main().catch((err) => {

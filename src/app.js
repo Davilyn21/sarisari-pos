@@ -33,6 +33,27 @@ app.use(
 app.use(flash);
 app.locals.peso = helpers.peso;
 
+app.get('/api/health', async (req, res) => {
+  if (!process.env.POSTGRES_URL &&
+      !process.env.POSTGRES_PRISMA_URL &&
+      !process.env.DATABASE_URL &&
+      !process.env.POSTGRES_URL_NON_POOLING) {
+    return res.status(503).json({
+      ok: false,
+      error: 'Database connection is not configured.',
+    });
+  }
+
+  try {
+    const db = require('./config/db');
+    await db.query('SELECT 1');
+    res.json({ ok: true });
+  } catch (err) {
+    console.error('Health check failed:', err);
+    res.status(503).json({ ok: false, error: 'Database connection failed.' });
+  }
+});
+
 app.get('/', (req, res) => {
   if (!req.session.user) return res.redirect('/login');
   res.redirect(req.session.user.role === 'admin' ? '/admin/dashboard' : '/pos');
